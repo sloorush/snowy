@@ -1,0 +1,33 @@
+ {tid}←Run arg
+ ;r;c;snow;star;tree;moon;Put;sky;flakes;window;mask;ULine;hadSnow
+
+ :If 0=⎕TID
+     tid←Run&arg ⋄ :Return
+ :EndIf
+
+ r←30 ⋄ c←80
+ ⍝snow←∊,\'XO∆'
+ snow←∊,\'·∙•'
+ ⍝star←∊,\'·∙•'
+ star←∊,\'✶٭✷'
+ tree←'⍋' ⋄ moon←'()'
+
+ ⎕ED&'window' ⋄ ⎕NQ ⎕SE'GotFocus'
+ ⍞←'⎕TKILL',⎕TID,'⍝ Press Enter to stop'
+
+ Put←{(⍺,' ')[l⌊?c⍴⍵×l←1+≢⍺]}
+ ULine←{⊃⎕FMT'_'(⎕UCS 8)⍵}¨
+ :Repeat
+     sky←moon[?≢moon]@(⊂?c,⍨r-1)⊢(↑star∘Put¨40⍴⍨r-1)⍪(tree Put 5)
+     flakes←r c⍴'' ⋄ hadSnow←c⍴0
+
+     :Repeat
+         flakes((snow Put 30)⍪¯1↓⌽⍨)←1⌊¯2+?r⍴7
+
+         mask←(tree≠sky)∧(' '≠flakes)
+         window←ULine@{hadSnow}@r⊢(mask/⍥,flakes)@{mask}sky
+         hadSnow∨←(' '≠⊢⌿flakes)∧(tree≠⊢⌿sky)
+
+         ⎕DL÷8
+     :Until ~' '∊⊢⌿window
+ :EndRepeat
